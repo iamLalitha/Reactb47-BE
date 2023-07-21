@@ -19,9 +19,16 @@ let notes=[
 
 ]
 //set the endpoints 
+//set the / route
 app.get('/',(request,response)=>{
-    response.send('Hello World');
+    response.send('<h1>Notes Application<h1>');
 });
+//to get all the notes-for that we are setting an another endpoint
+app.get('/api/notes',(request,response)=>{
+    response.json(notes);
+})
+
+
 //we need to define a port to listen for request
 const PORT =3001;
 app.listen(PORT, ()=>{
