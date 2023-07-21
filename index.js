@@ -1,9 +1,5 @@
-//simple web server 
-//here http is a built-in module 
-const http =require('http');
-//createserver will create a server and store it in app
-//we need to pass 2 arguments in createserver , they are request and response
-
+const express= require('express');
+const app=express();
 let notes=[
     {
         id:1,
@@ -22,17 +18,12 @@ let notes=[
     },
 
 ]
-
-
-const app=http.createServer((request,response)=>{
-    // response.writeHead(200,{'Content-Type':'text/plain'});//if we want html then we can add 'text/html' in content type
-    // response.end('Hello world');
-   
-    response.writeHead(200,{'Content-Type':'application/json'});
-    response.end(JSON.stringify(notes));
+//set the endpoints 
+app.get('/',(request,response)=>{
+    response.send('Hello World');
 });
-
 //we need to define a port to listen for request
 const PORT =3001;
-app.listen(PORT);
-console.log(`server running on port ${PORT}`);
+app.listen(PORT, ()=>{
+    console.log(`server running on port ${PORT}`);
+});
