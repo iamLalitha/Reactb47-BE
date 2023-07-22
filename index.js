@@ -3,6 +3,9 @@ const app=express();
 
 //middleware
 app.use(express.json());
+
+
+
 let notes=[
     {
         id:1,
@@ -38,16 +41,61 @@ app.post('/api/notes',(request,response)=>{
 });
 
 //fetches a single resource based on the request data 
-app.post('/api/notes/:id',(request,response)=>{
+app.get('/api/notes/:id',(request,response)=>{
    const id=request.params.id;
    const note=notes.find(note=>note.id==id);
   if(note){
     response.status(200).json(note);
   }
   else{
-    response.status(404).end('id does not exists');
+    response.status(404).json({message:'id does not exists'});
   }
 })
+
+//for deleting a single resource  based on id 
+app.delete('/api/notes/:id',(request,response)=>{
+    //get the id 
+    const id=request.params.id;
+    
+   const note=notes.find(note=>note.id==id);
+    notes = notes.filter(note=>note.id!= id);
+  if(note){
+    response.status(204).json(note);
+  }
+  else{
+    response.status(404).json({message:'id does not exists'});
+  }
+});
+
+//replaces the entire note object identified by an id 
+app.put('/api/notes/:id',(request,response)=>{
+    const id=request.params.id;
+    const noteToReplace =request.body;
+    const note=notes.find(note=>note.id==id);
+    notes=notes.map(note=> note.id ==id? noteToReplace: note);
+   
+    if(note){
+        response.status(200).json({message:'note replaced'});
+      }
+      else{
+        response.status(404).json({message:'id does not exists'});
+      }
+});
+
+//for patch request
+app.patch('/api/notes/:id',(request,response)=>{
+    const id=request.params.id;
+    const noteToReplace =request.body;
+    const note=notes.find(note=>note.id==id);
+    notes=notes.map(note=> note.id ==id?{...note,...noteToReplace}: note);
+   
+    if(note){
+        response.status(200).json({message:'note patched'});
+      }
+      else{
+        response.status(404).json({message:'id does not exists'});
+      }
+});
 
 //we need to define a port to listen for request
 const PORT =3001;
